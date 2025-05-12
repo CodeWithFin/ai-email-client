@@ -1,5 +1,6 @@
 import { Email } from '../types/email';
 import { formatDate } from '../utils/date';
+import ResponseSuggestions from './ResponseSuggestions';
 
 export default function EmailListItem({ email }: { email: Email }) {
   const [expanded, setExpanded] = useState(false);
@@ -20,11 +21,17 @@ export default function EmailListItem({ email }: { email: Email }) {
             {email.subject}
           </p>
           {expanded && (
-            <div className="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
-              {email.body}
-            </div>
+          {expanded && (
+            <>
+              <div className="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                {email.body}
+              </div>
+              <ResponseSuggestions 
+                emailId={email.id} 
+                emailContent={`From: ${email.from}\nSubject: ${email.subject}\n\n${email.body}`}
+              />
+            </>
           )}
-        </div>
         <div className="ml-4 text-xs text-gray-500 dark:text-gray-400">
           {formatDate(email.date)}
         </div>

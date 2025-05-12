@@ -4,6 +4,8 @@ import cors from 'cors';
 import { googleAuthHandler, googleAuthCallbackHandler } from './controllers/auth.controller';
 import { authenticate } from './middleware/auth';
 import { listEmails } from './controllers/email.controller';
+import { getResponseSuggestions } from './controllers/ai.controller';
+
 dotenv.config();
 
 
@@ -20,6 +22,7 @@ app.get('/api/auth/google/callback', googleAuthCallbackHandler);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', version: '1.0.0' });
 });
+app.post('/api/ai/suggestions', authenticate, getResponseSuggestions);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
