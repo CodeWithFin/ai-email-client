@@ -34,6 +34,11 @@ export default function EmailListItem({ email }: { email: Email }) {
           {email.snippet}
         </p>
       )}
+      {!expanded && email.summary && (
+  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+    <span className="font-medium">AI Summary:</span> {email.summary}
+  </p>
+)}
     </div>
   );
 }

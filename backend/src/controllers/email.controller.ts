@@ -1,6 +1,7 @@
 import { AuthenticatedRequest } from '../middleware/auth';
 import { EmailService } from '../services/email.service';
 import { google } from 'googleapis';
+import { AIService } from '../services/ai.service';
 
 export const listEmails = async (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
@@ -22,6 +23,20 @@ export const listEmails = async (req: AuthenticatedRequest, res: Response) => {
         emailService.getEmailDetails(msg.id!)
       )
     );
+    const emailsWithSummaries = await Promise.all(
+      emails.map(async email => {
+        try {
+          const summary = await AIService.summarizeEmail(email.body);
+          return { ...email, summary };
+        } catch (error) {
+          console.error('Failed to generate summary:', error);
+          return { ...email, summary: 'Summary unavailable' };
+        }
+      })
+    );
+    
+    res.json(emailsWithSummaries);
+    
     
     res.json(emails);
   } catch (error) {

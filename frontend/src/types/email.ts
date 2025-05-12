@@ -9,4 +9,5 @@ export interface Email {
     body: string;
     labels?: string[];
     read?: boolean;
+    summary?: string;
   }
